@@ -1,12 +1,12 @@
 import React from "react";
-import sill from "../assets/sillhouete.png";
-import LineChart from "../components/charts/LineChart.jsx";
-import BarChart from "../components/charts/BarChart.jsx";
+import PieChartComponent from "../components/charts/PieChartComponent.jsx";
+import LineChartComponent from "../components/charts/LineChartComponent.jsx";
+import BarChartComponent from "../components/charts/BarChartComponent.jsx";
 
 const Dashboard = () => {
   return (
     <>
-      <div className="grid grid-cols-4 gap-6">
+      <div className="grid grid-cols-1 lg:grid-cols-4 gap-6">
         <div className="stats shadow">
           <div className="stat">
             <div className="stat-title">Total Enrollees</div>
@@ -24,9 +24,17 @@ const Dashboard = () => {
         </div>
       </div>
 
-      <div className="grid grid-cols-2 gap-6">
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
         <div>
-          <BarChart />
+          <LineChartComponent />
+        </div>
+
+        <div>
+          <PieChartComponent />
+        </div>
+
+        <div>
+          <BarChartComponent />
         </div>
       </div>
     </>

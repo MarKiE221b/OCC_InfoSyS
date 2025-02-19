@@ -5,7 +5,7 @@ import LeftSideBar from "../components/LeftSideBar.jsx";
 
 const MainLayout = () => {
   return (
-    <div className="drawer lg:drawer-open h-screen">
+    <div className="drawer lg:drawer-open">
       <input id="my-drawer-3" type="checkbox" className="drawer-toggle" />
       <div className="drawer-content flex flex-col">
         {/* Navbar */}
