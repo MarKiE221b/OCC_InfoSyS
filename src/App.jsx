@@ -1,9 +1,9 @@
 import { BrowserRouter, Route, Routes } from "react-router";
 
-import MainLayout from "./layouts/MainLayout";
+import MainLayout from "./layouts/MainLayout.jsx";
 
-import ListOfSuc from "./pages/ListOfSuc";
-import Dashboard from "./pages/Dashboard";
+import ListOfSuc from "./pages/ListOfSuc.jsx";
+import Dashboard from "./pages/Dashboard.jsx";
 
 function App() {
   return (
