@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { Outlet } from "react-router";
-import NavBar from "../components/NavBar";
-import LeftSideBar from "../components/LeftSideBar";
+import NavBar from "../components/Navbar.jsx";
+import LeftSideBar from "../components/LeftSideBar.jsx";
 
 const MainLayout = () => {
   return (
@@ -9,7 +9,6 @@ const MainLayout = () => {
       <input id="my-drawer-3" type="checkbox" className="drawer-toggle" />
       <div className="drawer-content flex flex-col">
         {/* Navbar */}
-
         <NavBar />
 
         {/* Page content here */}

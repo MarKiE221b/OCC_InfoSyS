@@ -63,7 +63,15 @@ const BarChart = () => {
     ],
   };
 
-  return <Bar options={options} data={data} />;
+  return( 
+    <div className="card w-full p-6 bg-base-100 shadow-xl mt-6">
+        <div>
+        <Bar options={options} data={data} />
+
+        </div>
+
+    </div>
+    )
 };
 
 export default BarChart;
