@@ -1,7 +1,7 @@
 import React from "react";
 import sill from "../assets/sillhouete.png";
 import LineChart from "../components/charts/LineChart.jsx";
-import BarChart from "../components/charts/Barchart.jsx";
+import BarChart from "../components/charts/BarChart.jsx";
 
 const Dashboard = () => {
   return (
