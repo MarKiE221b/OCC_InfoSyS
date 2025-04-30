@@ -1,10 +1,10 @@
 import React, { useEffect, useState } from "react";
-import { Outlet, useNavigate } from "react-router";
-import NavBar from "../components/admin-components/Navbar.jsx";
-import LeftSideBar from "../components/admin-components/LeftSideBar.jsx";
+import { Outlet, useLocation, useNavigate } from "react-router";
+import NavBar from "../components/user-components/Navbar.jsx";
+import LeftSideBar from "../components/user-components/LeftSideBar.jsx";
 import { useVerifyToken } from "../hooks/useAuthentication.js";
 
-const MainLayout = () => {
+const UserLayout = () => {
   const navigate = useNavigate();
 
   const {
@@ -20,8 +20,8 @@ const MainLayout = () => {
           token: localStorage.getItem("ACCESSTOKEN"),
         });
 
-        if (payload.payload.role === "SuperAdmin") {
-          navigate("/");
+        if (payload.payload.role === "Admin") {
+          navigate("/user");
         }
       } catch (error) {
         navigate("/login");
@@ -62,4 +62,4 @@ const MainLayout = () => {
     );
 };
 
-export default MainLayout;
+export default UserLayout;

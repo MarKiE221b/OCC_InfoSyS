@@ -1,22 +1,42 @@
 import React from "react";
 import { HiMiniSquaresPlus } from "react-icons/hi2";
-import { FaSchool } from "react-icons/fa";
+import { FaSchool,FaFileAlt } from "react-icons/fa";
+import { IoMdPeople } from "react-icons/io";
+import { FaGraduationCap } from "react-icons/fa6";
+
 
 import { Link, NavLink, useLocation } from "react-router";
+
+import logo from "../../assets/Commission_on_Higher_Education_(CHEd).png";
 
 const LeftSideBar = () => {
   const location = useLocation();
 
   const routes = [
     {
-      path: "/",
+      path: "/user",
       icon: <HiMiniSquaresPlus />,
       name: "Dashboard",
     },
     {
-      path: "/suc",
+      path: "/user/school",
       icon: <FaSchool />,
-      name: "SUC's",
+      name: "Schools",
+    },
+    {
+      path: "/user/member",
+      icon: <IoMdPeople />,
+      name: "Members",
+    },
+    {
+      path: "/user/program",
+      icon: <FaGraduationCap />,
+      name: "Programs",
+    },
+    {
+      path: "/user/documents",
+      icon: <FaFileAlt />,
+      name: "Documents",
     },
   ];
 
@@ -40,14 +60,14 @@ const LeftSideBar = () => {
             xmlns="http://www.w3.org/2000/svg"
             fill="none"
             viewBox="0 0 24 24"
-            stroke-width="1.5"
+            strokeWidth="1.5"
             stroke="currentColor"
             aria-hidden="true"
             className="h-5 inline-block w-5"
           >
             <path
-              stroke-linecap="round"
-              stroke-linejoin="round"
+              strokeLinecap="round"
+              strokeLinejoin="round"
               d="M6 18L18 6M6 6l12 12"
             ></path>
           </svg>
@@ -55,8 +75,8 @@ const LeftSideBar = () => {
 
         <li className="mb-2 font-semibold text-xl mr-14">
           <Link to={"/app/welcome"}>
-            <img className="mask mask-squircle w-10" src="" alt="logo" />
-            CCO InfoSyS
+            <img className="mask mask-squircle w-10" src={logo} alt="logo" />
+            OCDRA-SPISyS
           </Link>
         </li>
 

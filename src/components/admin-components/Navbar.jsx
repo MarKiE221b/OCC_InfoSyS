@@ -1,9 +1,9 @@
 import React from "react";
 import { Link } from "react-router";
 
-const NavBar = () => {
+const NavBar = ({ onLogout }) => {
   return (
-    <div className="navbar sticky top-0 z-10 bg-base-100 w-full">
+    <div className="navbar fixed left-0 top-0 z-10 bg-base-100 w-full border-b">
       <div className="flex-none lg:hidden">
         <label
           htmlFor="my-drawer-3"
@@ -54,7 +54,9 @@ const NavBar = () => {
             <a>Settings</a>
           </li>
           <li>
-            <a>Logout</a>
+            <button type="button" onClick={() => onLogout()}>
+              Logout
+            </button>
           </li>
         </ul>
       </div>

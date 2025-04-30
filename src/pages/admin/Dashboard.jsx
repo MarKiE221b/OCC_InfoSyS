@@ -1,11 +1,11 @@
 import React from "react";
-import PieChartComponent from "../components/charts/PieChartComponent.jsx";
-import LineChartComponent from "../components/charts/LineChartComponent.jsx";
-import BarChartComponent from "../components/charts/BarChartComponent.jsx";
+import PieChartComponent from "../../components/charts/PieChartComponent.jsx";
+import LineChartComponent from "../../components/charts/LineChartComponent.jsx";
+import BarChartComponent from "../../components/charts/BarChartComponent.jsx";
 
 const Dashboard = () => {
   return (
-    <>
+    <div className="py-20">
       <div className="grid grid-cols-1 lg:grid-cols-4 gap-6">
         <div className="stats shadow">
           <div className="stat">
@@ -37,7 +37,7 @@ const Dashboard = () => {
           <BarChartComponent />
         </div>
       </div>
-    </>
+    </div>
   );
 };
 
