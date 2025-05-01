@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import { useFetchMember } from "../../hooks/userMember";
 import AddModal from "../../components/user-components/memberComponents/AddModal";
 import ReusableTable from "../../components/user-components/tableComponents/ReusableTable";
@@ -6,25 +6,21 @@ import Loading from "../../components/loading-components/Loading";
 
 import { IoIosPhonePortrait, IoIosMail } from "react-icons/io";
 import ViewMemberModal from "../../components/user-components/memberComponents/ViewMemberModal";
+import DeleteDialog from "../../components/user-components/memberComponents/DeleteDialog";
+import { set } from "ol/transform";
 
 const Members = () => {
-  const {
-    mutateAsync: fetchedMembers,
-    data: responseData,
-    isPending: loading,
-  } = useFetchMember();
+  const [memberId, setMemberId] = useState(null);
+  const userDetails = useMemo(
+    () => JSON.parse(localStorage.getItem("USER_DETAILS")),
+    []
+  );
 
-  const userDetails = JSON.parse(localStorage.getItem("USER_DETAILS"));
+  const { data: responseData, isFetching: loading } = useFetchMember({
+    id: userDetails?.suc_id,
+  });
 
-  useEffect(() => {
-    const fetchMutation = async (_id) => {
-      await fetchedMembers({ id: _id });
-    };
-
-    fetchMutation(userDetails.suc_id);
-  }, []);
-
-  const data = responseData?.data || [];
+  const data = responseData ? responseData : [];
 
   const columns = useMemo(
     () => [
@@ -32,13 +28,15 @@ const Members = () => {
         accessorKey: "fullname",
         header: "Name",
         cell: ({ row }) => (
-          <div className="flex items-center gap-2">
+          <div className="flex items-center gap-3">
             <img
               src={row.original.profilePicture}
               alt="profile"
-              className="w-10 h-10 rounded-full"
+              className="w-10 h-10 sm:w-12 sm:h-12 rounded-full border-2 border-primary object-cover shadow"
             />
-            <span>{row.original.fullname}</span>
+            <span className="font-medium text-base break-all">
+              {row.original.fullname}
+            </span>
           </div>
         ),
       },
@@ -47,65 +45,93 @@ const Members = () => {
         header: "Office",
         cell: ({ row }) => (
           <div className="text-left p-2">
-            <h3 className="">{row.original.office}</h3>
+            <span className="text-sm text-gray-700 break-all">
+              {row.original.office}
+            </span>
           </div>
         ),
       },
       {
         accessorKey: "positionOnBoard",
-        header: "Position",
+        header: "Position & Contact",
         cell: ({ row }) => (
-          <div className="text-left p-2">
-            <h3 className="font-bold">{row.original.positionOnBoard}</h3>
-            <p>{row.original.email}</p>
-            <p>{row.original.phoneNumber}</p>
+          <div className="text-left p-2 space-y-1">
+            <span className="font-semibold text-primary block">
+              {row.original.positionOnBoard}
+            </span>
+            <div className="flex items-center gap-1 text-xs text-gray-600">
+              <IoIosMail className="text-base" />
+              <span className="truncate">{row.original.email}</span>
+            </div>
+            <div className="flex items-center gap-1 text-xs text-gray-600">
+              <IoIosPhonePortrait className="text-base" />
+              <span className="truncate">{row.original.phoneNumber}</span>
+            </div>
           </div>
         ),
       },
       {
         accessorKey: "dateOfAppointment",
-        header: "Date of Appointment",
+        header: "Appointment",
         cell: ({ row }) => (
           <div className="text-left p-2">
-            <h3>{row.original.dateOfAppointment?.split("T")[0]}</h3>
+            <span className="badge badge-info badge-outline text-xs">
+              {row.original.dateOfAppointment?.split("T")[0]}
+            </span>
           </div>
         ),
       },
       {
         accessorKey: "expirationOfTerm",
-        header: "Expiration of Term",
+        header: "Expiration",
         cell: ({ row }) => (
           <div className="text-left p-2">
-            <h3>{row.original.expirationOfTerm?.split("T")[0]}</h3>
+            <span className="badge badge-warning badge-outline text-xs">
+              {row.original.expirationOfTerm?.split("T")[0]}
+            </span>
           </div>
         ),
       },
       {
         accessorKey: "status",
         header: "Status",
-        cell: ({ row }) =>
-          row.original.status === "Active" ? (
-            <div className="text-left p-2">
-              <h3 className="badge badge-accent badge-outline">
-                {row.original.status}
-              </h3>
-            </div>
-          ) : (
-            <div className="text-left p-2">
-              <h3 className="badge badge-error badge-outline">
-                {row.original.status}
-              </h3>
-            </div>
-          ),
+        cell: ({ row }) => (
+          <div className="text-left p-2">
+            <span
+              className={`badge ${
+                row.original.status === "Active"
+                  ? "badge-success"
+                  : "badge-error"
+              } badge-outline px-3 py-1 text-xs`}
+            >
+              {row.original.status}
+            </span>
+          </div>
+        ),
       },
       {
         header: "Action",
         cell: ({ row }) => (
-          <div className="text-left p-2">
-            <div className="">
-              <button className="btn join-item">View</button>
-              <button className="btn join-item">Delete</button>
-            </div>
+          <div className="flex gap-2 justify-center flex-wrap">
+            <button
+              className="btn btn-xs sm:btn-sm btn-primary btn-outline rounded-full px-3"
+              onClick={() =>
+                document.getElementById("viewMember_Modal")?.showModal?.()
+              }
+              aria-label="View Member"
+            >
+              View
+            </button>
+            <button
+              className="btn btn-xs sm:btn-sm btn-error btn-outline rounded-full px-3"
+              onClick={() => {
+                setMemberId(row.original._id);
+                document.getElementById("deleteMember_Modal")?.showModal?.();
+              }}
+              aria-label="Delete Member"
+            >
+              Delete
+            </button>
           </div>
         ),
       },
@@ -117,28 +143,25 @@ const Members = () => {
     <div className="py-20">
       <ViewMemberModal />
       <AddModal />
+      <DeleteDialog id={memberId} />
       <div className="card bg-base-100 shadow-xl p-5">
         <h2 className="text-xl font-semibold inline-block">Members</h2>
         <div className="flex justify-end">
           <button
             className="btn btn-outline"
             onClick={() =>
-              document.getElementById("addMember_Modal").showModal()
+              document.getElementById("addMember_Modal")?.showModal?.()
             }
           >
             Add Member
           </button>
         </div>
         <div className="divider mt-2"></div>
-
-        {/* table */}
         <div>
           {loading ? (
             <Loading />
           ) : (
-            <>
-              <ReusableTable data={data} columns={columns} />
-            </>
+            <ReusableTable data={data} columns={columns} />
           )}
         </div>
       </div>

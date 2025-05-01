@@ -24,9 +24,13 @@ const Profile = () => {
     fullName: userDetails.fullname || "",
     office: userDetails.office || "",
     positionOnBoard: userDetails.positionOnBoard || "",
-    dateOfAppointment: userDetails.dateOfAppointment.split("T")[0] || "",
+    dateOfAppointment: userDetails.dateOfAppointment
+      ? userDetails.dateOfAppointment.split("T")[0]
+      : "",
     durationOfTerm: userDetails.durationOfTerm || "",
-    expirationOfTerm: userDetails.expirationOfTerm.split("T")[0] || "",
+    expirationOfTerm: userDetails.expirationOfTerm
+      ? userDetails.expirationOfTerm.split("T")[0]
+      : "",
     email: userDetails.email || "",
     phoneNumber: userDetails.phoneNumber || "",
   });

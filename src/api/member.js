@@ -30,3 +30,17 @@ export const updateMember = async (data) => {
 
   return response;
 };
+
+export const deleteMember = async (id) => {
+  const { data: response } = await makeRequest.post(
+    `/delete-member`,
+    { _id: id },
+    {
+      headers: {
+        Authorization: `Bearer ${localStorage.getItem("ACCESSTOKEN")}`,
+      },
+    }
+  );
+
+  return response;
+};

@@ -19,9 +19,12 @@ const MainLayout = () => {
         const payload = await verifyMutation({
           token: localStorage.getItem("ACCESSTOKEN"),
         });
+        console.log(payload);
 
         if (payload.payload.role === "SuperAdmin") {
           navigate("/");
+        } else {
+          navigate("/login");
         }
       } catch (error) {
         navigate("/login");

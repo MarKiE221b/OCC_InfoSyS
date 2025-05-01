@@ -1,6 +1,11 @@
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 
-import { addMember, fetchMembers, updateMember } from "../api/member";
+import {
+  addMember,
+  deleteMember,
+  fetchMembers,
+  updateMember,
+} from "../api/member";
 
 export const useAddMember = () => {
   const queryClient = useQueryClient();
@@ -28,15 +33,23 @@ export const useUpdateMember = () => {
   });
 };
 
-export const useFetchMember = () => {
+export const useFetchMember = (params) => {
+  return useQuery({
+    queryKey: ["fetchMembers", params],
+    queryFn: () => fetchMembers(params),
+    select: (data) => data.data,
+  });
+};
+
+export const useDeleteMember = () => {
   const queryClient = useQueryClient();
   return useMutation({
     mutationFn: (data) => {
-      return fetchMembers(data);
+      return deleteMember(data);
     },
 
     onSuccess: (responseData) => {
-      "Success:", responseData.data;
+      //   queryClient.invalidateQueries({ queryKey: ["fetchAllAccounts"] });
     },
   });
 };

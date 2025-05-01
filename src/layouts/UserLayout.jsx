@@ -22,6 +22,8 @@ const UserLayout = () => {
 
         if (payload.payload.role === "Admin") {
           navigate("/user");
+        } else {
+          navigate("/login");
         }
       } catch (error) {
         navigate("/login");

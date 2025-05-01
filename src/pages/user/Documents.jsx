@@ -1,13 +1,14 @@
 import React, { useEffect, useState } from "react";
-import { Outlet, useLocation } from "react-router";
+import { Outlet, useLocation, useNavigate } from "react-router";
 
 import CardSelections from "../../components/user-components/documentComponents/CardSelections";
 import documentImg from "../../assets/document-svgrepo-com.png";
 import travelImg from "../../assets/airplane-plane-svgrepo-com.png";
-import nonTravelImg from "../../assets/no-traveling.png"
+import nonTravelImg from "../../assets/no-traveling.png";
 
 const Documents = () => {
   const pathname = useLocation().pathname;
+  const navigate = useNavigate();
 
   const cards = [
     {
@@ -32,7 +33,7 @@ const Documents = () => {
 
   const handlePromptSelect = (type) => {
     setShowPrompt(false);
-    window.location.href = `/user/documents/${selectedCard.link}/${type}`;
+    navigate(`/user/documents/${selectedCard.link}/${type}`);
   };
 
   return (
