@@ -31,7 +31,8 @@ export const useVerifyToken = () => {
     },
 
     onError: () => {
-      Navigate("/login");
+      const navigate = useNavigate();
+      navigate("/login");
     },
   });
 };

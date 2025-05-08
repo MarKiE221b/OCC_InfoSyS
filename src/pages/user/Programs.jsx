@@ -26,19 +26,23 @@ const Programs = () => {
       },
       {
         accessorKey: "copc",
-        header: "COPC",
+        header: "With COPC",
+      },
+      {
+        accessorKey: "chedAccreditation",
+        header: "Agency Accreditation",
+      },
+      {
+        accessorKey: "serialNumber",
+        header: "Serial Number",
       },
       {
         accessorKey: "dateIssued",
         header: "Date Issued",
       },
       {
-        accessorKey: "chedAccreditation",
-        header: "CHED Agency Accreditation",
-      },
-      {
-        accessorKey: "serialNumber",
-        header: "Serial Number",
+        accessorKey: "accredLevel",
+        header: "Accreditation Level",
       },
     ],
     []

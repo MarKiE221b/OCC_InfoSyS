@@ -1,35 +1,44 @@
 import React, { useRef, useState } from "react";
-import sampleImg from "../../../assets/sample.jpg";
-import { useAddMember } from "../../../hooks/userMember";
+import { useUpdateMemberDetails } from "../../../hooks/userMember";
 import { useEffect } from "react";
 
-const AddModal = () => {
+const EditModal = ({ details }) => {
   const formRef = useRef(null);
-  const details = JSON.parse(localStorage.getItem("USER_DETAILS"));
 
-  const [formData, setFormData] = useState({
-    suc_id: details?.suc_id || "",
-    fullname: "",
-    office: "",
-    positionOnBoard: "",
-    dateOfAppointment: "",
-    durationOfTerm: "",
-    expirationOfTerm: "",
+  const formatDateForInput = (dateStr) => {
+    if (!dateStr) return "";
+    const date = new Date(dateStr);
+    return isNaN(date.getTime()) ? "" : date.toISOString().slice(0, 10);
+  };
+
+  const initialFormState = (details) => ({
+    _id: details?._id || "",
+    fullname: details?.fullname || "",
+    office: details?.office || "",
+    positionOnBoard: details?.positionOnBoard || "",
+    dateOfAppointment: formatDateForInput(details?.dateOfAppointment),
+    durationOfTerm: details?.durationOfTerm || "",
+    expirationOfTerm: formatDateForInput(details?.expirationOfTerm),
     image: null,
-    email: "",
-    phoneNumber: "",
+    email: details?.email || "",
+    phoneNumber: details?.phoneNumber || "",
   });
 
+  const [formData, setFormData] = useState(initialFormState(details));
+  const [showConfirm, setShowConfirm] = useState(false);
+  const [showSuccess, setShowSuccess] = useState(false);
+
   const {
-    mutateAsync: mutateAddMember,
+    mutateAsync: mutateEditMember,
     isSuccess: mutationSuccess,
     isLoading,
     isError,
     error,
-  } = useAddMember();
+  } = useUpdateMemberDetails();
 
-  const [showConfirm, setShowConfirm] = useState(false);
-  const [showSuccess, setShowSuccess] = useState(false);
+  useEffect(() => {
+    setFormData(initialFormState(details));
+  }, [details]);
 
   useEffect(() => {
     if (mutationSuccess) {
@@ -57,7 +66,7 @@ const AddModal = () => {
     });
     if (formData.image) formDataToSend.append("image", formData.image);
     try {
-      await mutateAddMember(formDataToSend);
+      await mutateEditMember(formDataToSend);
     } catch {}
   };
 
@@ -73,24 +82,13 @@ const AddModal = () => {
 
   const handleSuccessOk = () => {
     setShowSuccess(false);
-    document.getElementById("addMember_Modal")?.close?.();
-    setFormData({
-      suc_id: details?.suc_id || "",
-      fullname: "",
-      office: "",
-      positionOnBoard: "",
-      dateOfAppointment: "",
-      durationOfTerm: "",
-      expirationOfTerm: "",
-      image: null,
-      email: "",
-      phoneNumber: "",
-    });
+    document.getElementById("editMember_Modal")?.close?.();
+    setFormData(initialFormState(details));
   };
 
   return (
     <>
-      <dialog id="addMember_Modal" className="modal">
+      <dialog id="editMember_Modal" className="modal">
         <div className="fixed inset-0 bg-black bg-opacity-40 z-40"></div>
         <div className="modal-box w-full max-w-3xl z-50 relative">
           {showConfirm && (
@@ -105,7 +103,7 @@ const AddModal = () => {
                     onClick={handleConfirmAdd}
                     disabled={isLoading}
                   >
-                    {isLoading ? "Adding..." : "Yes, Add"}
+                    {isLoading ? "Updating..." : "Yes, Update"}
                   </button>
                   <button
                     className="btn btn-neutral"
@@ -124,7 +122,7 @@ const AddModal = () => {
               <div className="fixed inset-0 bg-black bg-opacity-40 z-40"></div>
               <div className="modal-box z-50 relative">
                 <h3 className="font-bold text-lg mb-4">Success</h3>
-                <p>Member added successfully!</p>
+                <p>Member updated successfully!</p>
                 <div className="modal-action">
                   <button className="btn btn-success" onClick={handleSuccessOk}>
                     OK
@@ -134,14 +132,14 @@ const AddModal = () => {
             </dialog>
           )}
 
-          <h3 className="font-bold text-lg mb-5">Add Board Member</h3>
+          <h3 className="font-bold text-lg mb-5">Edit Profile</h3>
           <form onSubmit={handleAddAccount} ref={formRef}>
             <div className="flex justify-center items-center gap-2 mb-5">
               <img
                 src={
                   formData.image
                     ? URL.createObjectURL(formData.image)
-                    : "https://via.placeholder.com/200"
+                    : details?.image
                 }
                 className="w-[200px] h-[200px] border-2 rounded-lg"
                 alt="Preview"
@@ -305,7 +303,7 @@ const AddModal = () => {
               }}
               disabled={isLoading}
             >
-              Add
+              Change
             </button>
             <form method="dialog">
               <button className="btn btn-neutral">Close</button>
@@ -317,4 +315,4 @@ const AddModal = () => {
   );
 };
 
-export default AddModal;
+export default EditModal;

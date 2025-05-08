@@ -15,7 +15,7 @@ export const useAddMember = () => {
     },
 
     onSuccess: (responseData) => {
-      //   queryClient.invalidateQueries({ queryKey: ["fetchAllAccounts"] });
+      queryClient.invalidateQueries({ queryKey: ["fetchMembers"] });
     },
   });
 };
@@ -29,6 +29,19 @@ export const useUpdateMember = () => {
 
     onSuccess: (responseData) => {
       localStorage.setItem("USER_DETAILS", JSON.stringify(responseData.item));
+    },
+  });
+};
+
+export const useUpdateMemberDetails = () => {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: (data) => {
+      return updateMember(data);
+    },
+
+    onSuccess: (responseData) => {
+      queryClient.invalidateQueries({ queryKey: ["fetchMembers"] });
     },
   });
 };
@@ -49,7 +62,7 @@ export const useDeleteMember = () => {
     },
 
     onSuccess: (responseData) => {
-      //   queryClient.invalidateQueries({ queryKey: ["fetchAllAccounts"] });
+      queryClient.invalidateQueries({ queryKey: ["fetchMembers"] });
     },
   });
 };

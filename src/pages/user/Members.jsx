@@ -7,10 +7,11 @@ import Loading from "../../components/loading-components/Loading";
 import { IoIosPhonePortrait, IoIosMail } from "react-icons/io";
 import ViewMemberModal from "../../components/user-components/memberComponents/ViewMemberModal";
 import DeleteDialog from "../../components/user-components/memberComponents/DeleteDialog";
-import { set } from "ol/transform";
+import EditModal from "../../components/user-components/memberComponents/EditModal";
 
 const Members = () => {
   const [memberId, setMemberId] = useState(null);
+  const [editMemberDetails, setEditMemberDetails] = useState(null);
   const userDetails = useMemo(
     () => JSON.parse(localStorage.getItem("USER_DETAILS")),
     []
@@ -20,7 +21,15 @@ const Members = () => {
     id: userDetails?.suc_id,
   });
 
-  const data = responseData ? responseData : [];
+  // Convert base64 image to a valid image source
+  const data = responseData
+    ? responseData.map((member) => ({
+        ...member,
+        image: member.image
+          ? `data:image/jpeg;base64,${member.image}`
+          : "/default-profile.png", // fallback image
+      }))
+    : [];
 
   const columns = useMemo(
     () => [
@@ -30,7 +39,7 @@ const Members = () => {
         cell: ({ row }) => (
           <div className="flex items-center gap-3">
             <img
-              src={row.original.profilePicture}
+              src={row.original.image}
               alt="profile"
               className="w-10 h-10 sm:w-12 sm:h-12 rounded-full border-2 border-primary object-cover shadow"
             />
@@ -115,12 +124,13 @@ const Members = () => {
           <div className="flex gap-2 justify-center flex-wrap">
             <button
               className="btn btn-xs sm:btn-sm btn-primary btn-outline rounded-full px-3"
-              onClick={() =>
-                document.getElementById("viewMember_Modal")?.showModal?.()
-              }
-              aria-label="View Member"
+              onClick={() => {
+                setEditMemberDetails(row.original);
+                document.getElementById("editMember_Modal")?.showModal?.();
+              }}
+              aria-label="Edit Member"
             >
-              View
+              Edit
             </button>
             <button
               className="btn btn-xs sm:btn-sm btn-error btn-outline rounded-full px-3"
@@ -143,6 +153,7 @@ const Members = () => {
     <div className="py-20">
       <ViewMemberModal />
       <AddModal />
+      <EditModal details={editMemberDetails} />
       <DeleteDialog id={memberId} />
       <div className="card bg-base-100 shadow-xl p-5">
         <h2 className="text-xl font-semibold inline-block">Members</h2>

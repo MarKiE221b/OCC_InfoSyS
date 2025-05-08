@@ -7,7 +7,6 @@ const Profile = () => {
   const userDetails = JSON.parse(localStorage.getItem("USER_DETAILS"));
 
   // Hook for updating member
-
   const { mutateAsync: updateMember } = useUpdateMember();
 
   // State for account management
@@ -121,7 +120,19 @@ const Profile = () => {
     setIsLoading(true);
 
     try {
-      await updateMember(profile);
+      // Prepare FormData if imageFile exists, else send profile as is
+      let payload;
+      if (imageFile) {
+        payload = new FormData();
+        Object.entries(profile).forEach(([key, value]) => {
+          payload.append(key, value);
+        });
+        payload.append("image", imageFile);
+      } else {
+        payload = profile;
+      }
+
+      await updateMember(payload);
       setSuccessMessage("Profile updated successfully!");
       setTimeout(() => setSuccessMessage(""), 3000);
     } catch (error) {
